@@ -1,0 +1,121 @@
+{% extends 'maiinn/mains.html' %}
+
+{% block sche %}
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+<style>
+    #mytextarea {
+        height: 80vh;
+    }
+</style>
+
+<script>
+    tinymce.init({
+        selector: '#mytextarea',
+        plugins: [
+            'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+            'table emoticons template paste help'
+        ],
+        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+            'forecolor backcolor emoticons | help',
+        menu: {
+            favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
+        },
+        menubar: 'favs file edit view insert format tools table help',
+    });
+</script>
+
+{% endblock %}
+
+{% block body %}
+
+<form action="newwpos" method="post">{% csrf_token %}
+    <section class="text-gray-600 body-font relative">
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex flex-col text-center w-full mb-12">
+                <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Create Your Blog</h1>
+                <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Whatever cardigan tote bag tumblr hexagon brooklyn
+                    asymmetrical gentrify.</p>
+            </div>
+            {% for post in posts %}
+            <div class="lg:w-1/2 md:w-2/3 mx-auto">
+                <div class="flex flex-wrap -m-2">
+                    <div class="p-2 w-1/2">
+                        <div class="relative">
+                            <label for="name" class="leading-7 text-sm text-gray-600">Author name</label>
+                            <input type="text" id="auth" name="auth"
+                                class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" value="{{post.author}}"
+                                required>
+                        </div>
+                    </div>
+                    <div class="p-2 w-1/2">
+                        <div class="relative">
+                            <label for="name" class="leading-7 text-sm text-gray-600">Mainhead</label>
+                            <input type="text" id="mainh" name="mainh"
+                                class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" value="{{post.mainhead}}"
+                                required>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="hidden" name="matchslug" value="{{post.slugg}}">
+                        <input type="hidden" name="snoo" value="{{post.sno}}">
+                    </div>
+                    <div class="p-2 w-1/2">
+                        <div class="relative">
+                            <label for="name" class="leading-7 text-sm text-gray-600">Slug</label>
+                            <input type="text" id="slug" name="slug"
+                                class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" value="{{post.slugg}}"
+                                required>
+                        </div>
+                    </div>
+                    <div class="p-2 w-1/2">
+                        <div class="relative">
+                            <label for="name" class="leading-7 text-sm text-gray-600">About Author</label>
+                            <input type="text" id="aboutauth" name="aboutauth"
+                                class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" value="{{post.aboutauthor}}"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="p-2 w-full">
+                        <!-- <h1>TinyMCE Quick Start Guide</h1> -->
+                        <!-- <form method="post"> -->
+                        <textarea id="mytextarea" required>{{post.content}}</textarea>
+                        <!-- </form> -->
+                        <!-- <button id="bt">Get HTML</button> -->
+                        <input type="hidden" id="myHtml" name="content" value="">
+                        <!-- <div class="relative">
+                            <label for="message" class="leading-7 text-sm text-gray-600">Content</label>
+                            <textarea id="content" name="content"
+                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                                required></textarea>
+                        </div> -->
+                    </div>
+                    {% endfor %}
+                    <div class="p-2 w-full">
+                        <button
+                            class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                            id="bt">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<hr>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    bt.addEventListener('click', (e) => {
+        console.log(e);
+        // myHtml.innerText = tinyMCE.get('mytextarea').getContent();
+        document.getElementById("myHtml").value = tinyMCE.get('mytextarea').getContent();
+        // document.write(myHtml.innerText = tinyMCE.get('mytextarea').getContent())
+    });
+</script>
+{% endblock %}
